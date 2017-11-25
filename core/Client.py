@@ -8,7 +8,7 @@ import time
 from core.Command import Command
 
 
-class Socket(object):
+class Client(object):
     def __init__(self, ip, port):
         self.__ip = ip
         self.__port = port
