@@ -43,7 +43,7 @@ class Client(object):
         self.__socket.send(struct.pack("!i", command.get_type()))
         self.__socket.send(struct.pack("!i", command.get_data_length()))
         self.__socket.send(command.get_data())
-        self.__socket.send(self.__delimiter_bytes)
+        self.__socket.send(self.__delimiter.encode('utf-8'))
         self.__mutex.release()
 
     def heartbeat(self):
