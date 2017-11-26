@@ -33,6 +33,7 @@ class Runner(object):
 
     def execute(self, command):
         message = struct.unpack("!s", command.get_data())
+        print('Receive: ' + message)
         if message == 'screen':
             Screen(command, self.__client).capture()
         if message == 'camera':
