@@ -32,7 +32,7 @@ class Runner(object):
             time.sleep(1)
 
     def execute(self, command):
-        message = struct.unpack("!s", command.get_data())
+        message = command.get_data().decode('utf-8')
         print('Receive: ' + message)
         if message == 'screen':
             Screen(command, self.__client).capture()

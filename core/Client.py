@@ -49,11 +49,7 @@ class Client(object):
     def heartbeat(self):
         t = threading.Thread(target=self.send_ping, name='HeartbeatThread')
         t.start()
-        command = Command()
-        command.set_type(2)
-        command.set_data_length(len(b'start'))
-        command.set_data(b'start')
-        self.send_command(command)
+        time.sleep(2)
 
     def send_ping(self):
         while True:
