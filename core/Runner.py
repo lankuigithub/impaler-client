@@ -1,13 +1,11 @@
 # -*- coding: UTF-8 -*-
 
-import struct
 import threading
-import time
 
 from app.QQMusic import QQMusic
+from core.Camera import Camera
 from core.Client import Client
 from core.Screen import Screen
-from core.Camera import Camera
 
 
 class Runner(object):
@@ -25,11 +23,12 @@ class Runner(object):
             elif command.get_type() == 2:
                 thread = threading.Thread(target=self.execute(command), name='ExecuteStringThread')
                 thread.start()
+            elif command.get_type() == 3:
+                self.save_capture(command)
             elif command.get_type() == 0x7FFFFFFF:
                 print('Receive: OK')
             else:
                 print("This is error command")
-            time.sleep(1)
 
     def execute(self, command):
         message = command.get_data().decode('utf-8')
@@ -40,3 +39,7 @@ class Runner(object):
             Camera(command, self.__client).shoot()
         else:
             self.__music.run(message)
+
+    def save_capture(self, command):
+        with open('capture.jpg', 'wb') as f:
+            f.write(command.get_data())

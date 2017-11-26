@@ -23,7 +23,9 @@ class Client(object):
         self.__delimiter_bytes = self.__delimiter.encode('utf-8')
 
     def receive(self):
-        self.__data += self.__socket.recv(1024)
+        data = self.__socket.recv(1024);
+        self.__data = self.__data + data
+        print(len(self.__data))
         if len(self.__data) < self.__headerSize:
             return ''
         command_type = struct.unpack("!i", self.__data[:4])[0]
@@ -49,7 +51,6 @@ class Client(object):
     def heartbeat(self):
         t = threading.Thread(target=self.send_ping, name='HeartbeatThread')
         t.start()
-        time.sleep(2)
 
     def send_ping(self):
         while True:

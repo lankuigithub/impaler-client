@@ -23,7 +23,7 @@ class Camera(object):
     def send(self):
         command = Command()
         command.set_type(3)
-        command.set_data_length(os.path.getsize(self.__screen_file))
-        with open(self.__screen_file, 'rb') as f:
+        command.set_data_length(os.path.getsize(self.__camera_file))
+        with open(self.__camera_file, 'rb') as f:
             command.set_data(f.read())
         self.__client.send_command(command)
