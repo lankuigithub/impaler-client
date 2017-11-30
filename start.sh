@@ -1,3 +1,3 @@
 #!/bin/sh
 
-nohup python /Users/lankui/PycharmProjects/impaler/Lanucher.py >> impaler.log &
+nohup python3 /Users/lankui/PycharmProjects/impaler/Lanucher.py >> impaler.log &

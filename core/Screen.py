@@ -27,6 +27,7 @@ class Screen(object):
     def send(self):
         command = Command()
         command.set_type(3)
+        command.set_target(self.__command.get_target())
         command.set_data_length(os.path.getsize(self.__screen_thumbnail_file))
         with open(self.__screen_thumbnail_file, 'rb') as f:
             command.set_data(f.read())

@@ -1,6 +1,7 @@
 class Command(object):
     def __init__(self):
         self.__type = 0
+        self.__target = 0
         self.__data_length = 0
         self.__data = bytes()
 
@@ -9,6 +10,12 @@ class Command(object):
 
     def get_type(self):
         return self.__type
+
+    def set_target(self, target):
+        self.__target = target
+
+    def get_target(self):
+        return self.__target
 
     def set_data_length(self, data_length):
         self.__data_length = data_length

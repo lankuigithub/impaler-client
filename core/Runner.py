@@ -1,16 +1,19 @@
 # -*- coding: UTF-8 -*-
 
 import threading
+import struct
 
 from app.QQMusic import QQMusic
 from core.Camera import Camera
 from core.Client import Client
+from core.Register import Register
 from core.Screen import Screen
 
 
 class Runner(object):
     def __init__(self, ip, port):
         self.__client = Client(ip, port)
+        Register(self.__client).register()
         self.__music = QQMusic()
 
     def start(self):
@@ -27,6 +30,10 @@ class Runner(object):
                 self.save_capture(command)
             elif command.get_type() == 0x7FFFFFFF:
                 print('Receive: OK')
+            elif command.get_type() == 0x10000002:
+                print(struct.unpack("!i", command.get_data())[0])
+            elif command.get_type() == 0x7FFFFFFE:
+                print('Error: ' + command.get_data().decode('utf-8'))
             else:
                 print("This is error command")
 
