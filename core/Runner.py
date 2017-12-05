@@ -1,7 +1,6 @@
 # -*- coding: UTF-8 -*-
 
 import threading
-import struct
 
 from app.QQMusic import QQMusic
 from core.Camera import Camera
@@ -18,35 +17,40 @@ class Runner(object):
 
     def start(self):
         while True:
-            command = self.__client.receive()
-            if command == '':
-                pass
-            elif command.get_type() == 1:
-                print('Heartbeat: Pong')
-            elif command.get_type() == 2:
-                thread = threading.Thread(target=self.execute(command), name='ExecuteStringThread')
-                thread.start()
-            elif command.get_type() == 3:
-                self.save_capture(command)
-            elif command.get_type() == 0x7FFFFFFF:
-                print('Receive: OK')
-            elif command.get_type() == 0x10000002:
-                print(struct.unpack("!i", command.get_data())[0])
-            elif command.get_type() == 0x7FFFFFFE:
-                print('Error: ' + command.get_data().decode('utf-8'))
-            else:
-                print("This is error command")
+            command_list = self.__client.receive()
+            for command in command_list:
+                if command.get_type() == 0x00000001:
+                    print('Heartbeat: Pong')
+                elif command.get_type() == 0x00000002:
+                    thread = threading.Thread(target=self.execute_string(command), name='ExecuteStringThread')
+                    thread.start()
+                elif command.get_type() == 0x00000003:
+                    thread = threading.Thread(target=self.execute_image(command), name='ExecuteImageThread')
+                    thread.start()
+                elif command.get_type() == 0x00000004:
+                    thread = threading.Thread(target=self.execute_screen(command), name='ExecuteScreenThread')
+                    thread.start()
+                elif command.get_type() == 0x00000005:
+                    thread = threading.Thread(target=self.execute_camera(command), name='ExecuteCameraThread')
+                    thread.start()
+                elif command.get_type() == 0x00000006:
+                    print("Register: " + command.get_data().decode('utf-8'))
+                elif command.get_type() == 0x00000007:
+                    print("Client List: " + command.get_data().decode('utf-8'))
+                else:
+                    print(command.get_type())
+                    print("This is error command")
 
-    def execute(self, command):
+    def execute_string(self, command):
         message = command.get_data().decode('utf-8')
-        print('Receive: ' + message)
-        if message == 'screen':
-            Screen(command, self.__client).capture()
-        if message == 'camera':
-            Camera(command, self.__client).shoot()
-        else:
-            self.__music.run(message)
+        print(message)
 
-    def save_capture(self, command):
+    def execute_screen(self, command):
+        Screen(command, self.__client).capture()
+
+    def execute_camera(self, command):
+        Camera(command, self.__client).shoot()
+
+    def execute_image(self, command):
         with open('capture.jpg', 'wb') as f:
             f.write(command.get_data())

@@ -2,7 +2,7 @@ import os
 import time
 
 import cv2
-from PIL import  Image
+from PIL import Image
 
 from core.Command import Command
 
@@ -30,7 +30,7 @@ class Camera(object):
 
     def send(self):
         command = Command()
-        command.set_type(3)
+        command.set_type(self.__command.get_type())
         command.set_target(self.__command.get_target())
         command.set_data_length(os.path.getsize(self.__camera_thumbnail_file))
         with open(self.__camera_thumbnail_file, 'rb') as f:

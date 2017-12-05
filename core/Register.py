@@ -26,7 +26,7 @@ class Register(object):
     def register(self):
         device_name = gethostname()
         command = Command()
-        command.set_type(0x10000001)
+        command.set_type(0x00000006)
         command.set_target(0x00000000)
         command.set_data_length(len(device_name.encode('utf-8')))
         command.set_data(device_name.encode('utf-8'))
