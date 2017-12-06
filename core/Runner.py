@@ -5,14 +5,12 @@ import threading
 from app.QQMusic import QQMusic
 from core.Camera import Camera
 from core.Client import Client
-from core.Register import Register
 from core.Screen import Screen
 
 
 class Runner(object):
     def __init__(self, ip, port):
         self.__client = Client(ip, port)
-        Register(self.__client).register()
         self.__music = QQMusic()
 
     def start(self):
