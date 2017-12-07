@@ -24,10 +24,12 @@ class Register(object):
         self.__client = client
 
     def register(self):
-        device_name = gethostname()
+        hostname = gethostname().replace("\n", "")
+        message = '{"code":0,"msg":"request","data":{"name":"' + hostname + '"}}'
+        print(message)
         command = Command()
         command.set_type(0x00000006)
         command.set_target(0x00000000)
-        command.set_data_length(len(device_name.encode('utf-8')))
-        command.set_data(device_name.encode('utf-8'))
+        command.set_data_length(len(message.encode('utf-8')))
+        command.set_data(message.encode('utf-8'))
         self.__client.send_command(command)

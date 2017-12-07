@@ -99,8 +99,8 @@ class Client(object):
     def send_test(self):
         time.sleep(2)
         command = Command()
-        command.set_type(0x00000002)
-        command.set_target(2202)
+        command.set_type(0x00000007)
+        command.set_target(0)
         command.set_data_length(len(b'hello'))
         command.set_data(b'hello')
         self.send_command(command)
