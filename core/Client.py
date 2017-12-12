@@ -5,8 +5,8 @@ import struct
 import threading
 import time
 
-from core.Register import Register
 from core.Command import Command
+from core.Register import Register
 
 
 class Client(object):
@@ -40,7 +40,7 @@ class Client(object):
         try:
             data = self.__socket.recv(1024)
             self.__data = self.__data + data
-        except ConnectionResetError:
+        except (ConnectionResetError, TimeoutError):
             print("Socket recv error!")
             self.__data = bytes()
             return command_list
@@ -73,7 +73,7 @@ class Client(object):
             self.__socket.send(command.get_data())
             self.__socket.send('IMPALER'.encode('utf-8'))
             self.__mutex.release()
-        except (BrokenPipeError, ConnectionResetError):
+        except (BrokenPipeError, ConnectionResetError, TimeoutError):
             self.__mutex.release()
             print("Socket send error!")
             time.sleep(5)
